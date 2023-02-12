@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const data = {
   1: ["Question1", "Answer1", "Link1", "Image1"],
   2: ["Question2", "Answer2", "Link2", "Image2"],
   3: ["Question3", "Answer3", "Link3", "Image3"],
-  4: ["Question4", "Answer4", "Link4", "Image4"]
+  4: ["Question4", "Answer4", "Link4", "Image4"],
 };
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  const handleSearch = event => {
+  const handleSearch = (event) => {
     setSearchTerm(event.target.value);
     setSearchResults(
-      Object.values(data).filter(
-        item => item[0].toLowerCase().includes(searchTerm.toLowerCase())
+      Object.values(data).filter((item) =>
+        item[0].toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
   };
@@ -32,7 +32,7 @@ const App = () => {
             </tr>
           </thead>
           <tbody>
-            {searchResults.map(result => (
+            {searchResults.map((result) => (
               <tr key={result[0]}>
                 <td>{result[1]}</td>
                 <td>
@@ -49,4 +49,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default App;
