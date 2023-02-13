@@ -9,10 +9,12 @@
   form {
     display: flex;
     align-items: center;
+    color:white;
   }
   
   label {
     margin-right: 10px;
+    color:aliceblue;
   }
   
   table {
@@ -20,12 +22,14 @@
     border-collapse: collapse;
     width: 60%;
     text-align: center;
+    color:aliceblue;
   }
   
   th,
   td {
     border: 1px solid black;
     padding: 10px;
+    color:white;
   }
   
   .buttons {
