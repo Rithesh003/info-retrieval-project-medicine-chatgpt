@@ -1,0 +1,51 @@
+.App {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .evaluation-metrics {
+    margin-bottom: 20px;
+  }
+  form {
+    display: flex;
+    align-items: center;
+  }
+  
+  label {
+    margin-right: 10px;
+  }
+  
+  table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 60%;
+    text-align: center;
+  }
+  
+  th,
+  td {
+    border: 1px solid black;
+    padding: 10px;
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    margin-top: 20px;
+  }
+
+  
+  button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    background-color: lightgray;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
