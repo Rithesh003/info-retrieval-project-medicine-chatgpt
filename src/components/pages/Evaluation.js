@@ -7,9 +7,9 @@ const data = [
       id: 1,
       question:
         "Is it true that people with Alzheimer’s disease are particularly prone to depression?",
-      chatgpt:
+      ResultA:
         "Yes, people with Alzheimer's disease are at a higher risk of depression due to changes in the brain,difficulty adapting, social isolation, and other factors. It is important to recognize and treat symptoms of depression.",
-      google:
+      ResultB:
         "Experts estimate that up to 40 percent of people with Alzheimer's disease suffer from significant depression. Identifying depression in someone with Alzheimer's can be difficult, since dementia can cause some of the same symptoms.",
       image: require("./Q1.png"),
       metrics: "",
@@ -21,9 +21,9 @@ const data = [
       id: 2,
       question:
         "Is it false that it has been scientifically proven that mental exercise can prevent a person from gettingAlzheimer’s disease? ",
-      chatgpt:
+      ResultA:
         "No, its not False. Evidence suggests that mental exercise may delay onset or slow progression of Alzheimer's, but more research is needed to understand the relationship.",
-      google:
+      ResultB:
         "Neither education nor brain exercises are a sure way to prevent Alzheimer's. But they may help delay symptoms and keep the mind working better for longer.",
       image: require("./Q2.png"),
       metrics: "",
@@ -35,9 +35,9 @@ const data = [
       id: 3,
       question:
         "Is it true that after symptoms of Alzheimer’s disease appear, the average life expectancy is 6 to 12 years?",
-      chatgpt:
+      ResultA:
         "Yes, that is generally true. After Alzheimer's symptoms appear, average life expectancy is 6-12 years, but this can vary depending on various factors.",
-      google:
+      ResultB:
         "On average, a person with Alzheimer's lives four to eight years after diagnosis, but can live as long as 20 years, depending on other factors.",
       image: require("./Q3.png"),
       metrics: "",
@@ -50,11 +50,82 @@ const imageSources = {
   2: require("./Q2.png"),
   3: require("./Q3.png"),
 };
+
 function App() {
   const [index, setIndex] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(data[0][0]);
   const [submitted, setSubmitted] = useState(false);
+  //   const [allOptionsSelected, setAllOptionsSelected] = useState(false);
+  const [selectedValue1, setSelectedValue1] = useState("");
+  const [selectedValue2, setSelectedValue2] = useState("");
+  const [selectedValue3, setSelectedValue3] = useState("");
+  const [selectedValue4, setSelectedValue4] = useState("");
+  const [selectedValue5, setSelectedValue5] = useState("");
+  const [selectedValue6, setSelectedValue6] = useState("");
+  const [selectedValue7, setSelectedValue7] = useState("");
+  const [selectedValue8, setSelectedValue8] = useState("");
+  const [selectedValue9, setSelectedValue9] = useState("");
+  const [selectedValue10, setSelectedValue10] = useState("");
+  const [selectedValue11, setSelectedValue11] = useState("");
+  const [selectedValue12, setSelectedValue12] = useState("");
 
+  const handleChange1 = (event) => {
+    setSelectedValue1(event.target.value);
+  };
+  const handleChange2 = (event) => {
+    setSelectedValue2(event.target.value);
+  };
+  const handleChange3 = (event) => {
+    setSelectedValue3(event.target.value);
+  };
+  const handleChange4 = (event) => {
+    setSelectedValue4(event.target.value);
+  };
+  const handleChange5 = (event) => {
+    setSelectedValue5(event.target.value);
+  };
+  const handleChange6 = (event) => {
+    setSelectedValue6(event.target.value);
+  };
+  const handleChange7 = (event) => {
+    setSelectedValue7(event.target.value);
+  };
+  const handleChange8 = (event) => {
+    setSelectedValue8(event.target.value);
+  };
+  const handleChange9 = (event) => {
+    setSelectedValue9(event.target.value);
+  };
+  const handleChange10 = (event) => {
+    setSelectedValue10(event.target.value);
+  };
+  const handleChange11 = (event) => {
+    setSelectedValue11(event.target.value);
+  };
+  const handleChange12 = (event) => {
+    setSelectedValue12(event.target.value);
+  };
+
+  const handleNext = () => {
+    if (
+      !selectedValue1 ||
+      !selectedValue2 ||
+      !selectedValue3 ||
+      !selectedValue4 ||
+      !selectedValue5 ||
+      !selectedValue6 ||
+      !selectedValue7 ||
+      !selectedValue8 ||
+      !selectedValue9 ||
+      !selectedValue10 ||
+      !selectedValue11 ||
+      !selectedValue12
+    ) {
+      alert("Please select all the options");
+      return;
+    }
+    // console.log(selectedValue1, selectedValue2, selectedValue3, selectedValue4, selectedValue5, selectedValue6);
+  };
   function handleClick(id) {
     if (id === 1) {
       window.open(
@@ -71,12 +142,12 @@ function App() {
     }
   }
 
-  const handleMetricsChange = (event) => {
-    setSelectedQuestion({
-      ...selectedQuestion,
-      metrics: event.target.value,
-    });
-  };
+  //   const handleMetricsChange = (event) => {
+  //     setSelectedQuestion({
+  //       ...selectedQuestion,
+  //       metrics: event.target.value,
+  //     });
+  //   };
 
   const handleCommentChange = (event) => {
     setSelectedQuestion({
@@ -88,27 +159,103 @@ function App() {
   const handleSubmit = () => {
     setSubmitted(true);
   };
+  function getFleschReadingEaseScore(text) {
+    const sentences = text.split(/[.?!]/);
+    const words = text.match(/\w+/g);
+    const syllables = text.match(/[aeiouy]+/gi);
+
+    const ASL = words.length / sentences.length;
+    const ASW = syllables.length / words.length;
+
+    const score = 206.835 - 1.015 * ASL - 84.6 * ASW;
+    const score2 = 0.39 * ASL + 11.8 * ASW - 15.59;
+
+    return isNaN(score) ? "" : score.toFixed(2);
+    return isNaN(score2) ? "" : score2.toFixed(2);
+  }
+  function getFleschKincaidScore(text) {
+    const sentences = text.split(/[.?!]/);
+    const words = text.match(/\w+/g);
+    const syllables = text.match(/[aeiouy]+/gi);
+
+    const ASL = words.length / sentences.length;
+    const ASW = syllables.length / words.length;
+
+    const score2 = 0.39 * ASL + 11.8 * ASW - 15.59;
+
+    return isNaN(score2) ? "" : score2.toFixed(2);
+  }
 
   return (
     <div className="App">
-      <video src="/videos/video1.mp4" autoPlay loop muted />
-      <h1 style={{ color: "aliceblue" }}>
-        {" "}
-        Comparision Between ChatGPT and Google{" "}
-      </h1>
+      <h1> Compare Question answering results </h1>
+      <br />
+      <th>Question</th>
+      {data[index].map((person) => (
+        <td>{person.question}</td>
+      ))}
       <table>
         <thead>
           <tr>
-            <th>Question</th>
-            <th>ChatGPT</th>
-            <th>Google</th>
+            <th>Source</th>
+            <th>Answer</th>
+            <th>Currency</th>
+            <th>Readability</th>
+            <th>Reliability</th>
+            <th>objectivity</th>
+            <th>relevance</th>
           </tr>
         </thead>
         <tbody>
           {data[index].map((person) => (
             <tr key={person.question}>
-              <td>{person.question}</td>
-              <td>{person.chatgpt}</td>
+              <td>Result A</td>
+              <td>{person.ResultA}</td>
+
+              <td>
+                <select value={selectedValue3} onChange={handleChange3}>
+                  <option value="">--Select--</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                  <option value="not sure">Not Sure</option>
+                </select>
+              </td>
+              <td>
+                <p>Score FRS: {getFleschReadingEaseScore(person.ResultA)}</p>
+                <p>Score FKS: {getFleschKincaidScore(person.ResultA)}</p>
+              </td>
+              <td>
+                <select value={selectedValue4} onChange={handleChange4}>
+                  <option value="">--Select--</option>
+                  <option value="reliable source">Reliable Source</option>
+                  <option value="other source">Other Source</option>
+                  <option value="no source">No Source</option>
+                  <option value="not sure">Not Sure</option>
+                </select>
+              </td>
+              <td>
+                <select value={selectedValue5} onChange={handleChange5}>
+                  <option value="">--Select--</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                  <option value="not sure">Not Sure</option>
+                </select>
+              </td>
+              <td>
+                <select value={selectedValue6} onChange={handleChange6}>
+                  <option value="">--Select--</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                  <option value="not sure">Not Sure</option>
+                </select>
+              </td>
+            </tr>
+          ))}
+          {data[index].map((person) => (
+            <tr key={person.question}>
+              {/* <td></td> */}
+              <td>Result B</td>
               <td>
                 {imageSources[person.id] && (
                   <img
@@ -117,6 +264,47 @@ function App() {
                     onClick={() => handleClick(person.id)}
                   />
                 )}
+              </td>
+
+              <td>
+                <select value={selectedValue8} onChange={handleChange8}>
+                  <option value="">--Select--</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                  <option value="not sure">Not Sure</option>
+                </select>
+              </td>
+              <td>
+                <p>Score FRS: {getFleschReadingEaseScore(person.ResultB)}</p>
+                <p>Score FKS: {getFleschKincaidScore(person.ResultB)}</p>
+              </td>
+
+              <td>
+                <select value={selectedValue4} onChange={handleChange4}>
+                  <option value="">--Select--</option>
+                  <option value="reliable source">Reliable Source</option>
+                  <option value="other source">Other Source</option>
+                  <option value="no source">No Source</option>
+                  <option value="not sure">Not Sure</option>
+                </select>
+              </td>
+              <td>
+                <select value={selectedValue5} onChange={handleChange5}>
+                  <option value="">--Select--</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                  <option value="not sure">Not Sure</option>
+                </select>
+              </td>
+              <td>
+                <select value={selectedValue12} onChange={handleChange12}>
+                  <option value="">--Select--</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                  <option value="not sure">Not Sure</option>
+                </select>
               </td>
             </tr>
           ))}
@@ -132,7 +320,7 @@ function App() {
         >
           Previous
         </button>
-        <button
+        {/* <button
           disabled={index === data.length - 1}
           onClick={() => {
             setIndex(index + 1);
@@ -141,38 +329,56 @@ function App() {
           }}
         >
           Next
+        </button> */}
+        <button
+          onClick={() => {
+            if (index < data.length - 1) {
+              handleNext();
+              setIndex(index + 1);
+              setSelectedQuestion(data[index + 1][0]);
+              //   setSubmitted(false);
+            }
+          }}
+        >
+          Next
         </button>
       </div>
       {!submitted && (
-        <div className="evaluation-form">
-          <div>
-            <label>Evaluation Metrics:</label>
+        <div className="row">
+          <div className="simi">
+            {" "}
+            <h3> Similarities Between the two Results </h3>
+            <br />
             <select
-              value={selectedQuestion.metrics}
-              onChange={handleMetricsChange}
+              className="dropdown-menu"
+              value={selectedValue12}
+              onChange={handleChange12}
             >
               <option value="">--Select--</option>
-              <option value="reliability">reliability</option>
-              <option value="currency">currency</option>
-              <option value="readability">readability</option>
-              <option value="disclosure">disclosure</option>
-              <option value="objectivity">objectivity</option>
-              <option value="relevance">relevance</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+              <option value="not sure">Not Sure</option>
             </select>
           </div>
-          <div>
+          <br />
+          <div className="comment">
             <label>Comment:</label>
+            <br />
+            <br />
             <textarea
               value={selectedQuestion.comment}
               onChange={handleCommentChange}
             />
+            <br />
+            <br />
+            <button onClick={handleSubmit}>Submit</button>
           </div>
-          <button onClick={handleSubmit}>Submit</button>
         </div>
       )}
       {submitted && (
         <div className="result">
-          <p>Evaluation Metrics: {selectedQuestion.metrics}</p>
+          {/* <p>Evaluation Metrics: {selectedQuestion.metrics}</p> */}
           <p>Comment: {selectedQuestion.comment}</p>
         </div>
       )}
@@ -181,3 +387,44 @@ function App() {
 }
 
 export default App;
+// import React, { useState } from "react";
+
+// function App() {
+//   const [selectedValue, setSelectedValue] = useState("");
+
+//   const handleChange = (event) => {
+//     setSelectedValue(event.target.value);
+//   };
+
+//   const handleNext = () => {
+//     if (!selectedValue) {
+//       alert("Please select an option from the dropdown");
+//       return;
+//     }
+//     console.log(selectedValue);
+//   };
+
+//   return (
+//     <div>
+//       <select value={selectedValue} onChange={handleChange}>
+//         <option value="">--Select--</option>
+//         <option value="low">Low</option>
+//         <option value="medium">Medium</option>
+//         <option value="high">High</option>
+//         <option value="not sure">Not Sure</option>
+//       </select>
+//       {/* <button onClick={handleNext}>Next</button> */}
+
+//       <select value={selectedValue} onChange={handleChange}>
+//         <option value="">--Select--</option>
+//         <option value="low">Low</option>
+//         <option value="medium">Medium</option>
+//         <option value="high">High</option>
+//         <option value="not sure">Not Sure</option>
+//       </select>
+//       <button onClick={handleNext}>Next</button>
+//     </div>
+//   );
+// }
+
+// export default App;
