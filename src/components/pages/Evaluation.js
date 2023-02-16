@@ -65,10 +65,59 @@ function App() {
   const [selectedValue7, setSelectedValue7] = useState("");
   const [selectedValue8, setSelectedValue8] = useState("");
   const [selectedValue9, setSelectedValue9] = useState("");
-  const [selectedValue10, setSelectedValue10] = useState("");
-  const [selectedValue11, setSelectedValue11] = useState("");
-  const [selectedValue12, setSelectedValue12] = useState("");
 
+  const saveSelectedOptions = () => {
+    // Create an object with the selected values
+
+    const selectedOptions = {
+      value1: selectedValue1,
+      value2: selectedValue2,
+      value3: selectedValue3,
+      value4: selectedValue4,
+      value5: selectedValue5,
+      value6: selectedValue6,
+      value7: selectedValue7,
+      value8: selectedValue8,
+      // fleschReadingEase: getFleschReadingEaseScore(score),
+      // fleschKincaidScore: getFleschKincaidScore(score2),
+      // fleschReadingEase: getFleschReadingEaseScore(score),
+      // fleschKincaidScore: getFleschKincaidScore(score2),
+    };
+    // Check if selectedOptions is a valid object
+    if (!selectedOptions || Object.keys(selectedOptions).length === 0) {
+      console.error("Error: selectedOptions is not a valid object");
+      return;
+    }
+
+    // Convert the object to a JSON string
+    let jsonOptions;
+    try {
+      jsonOptions = JSON.stringify(selectedOptions);
+    } catch (e) {
+      console.error(`Error: JSON.stringify failed - ${e}`);
+      return;
+    }
+    // Create a new Blob object with the JSON string
+    const blob = new Blob([jsonOptions], { type: "application/json" });
+
+    // Create a new anchor element to download the file
+    const anchor = document.createElement("a");
+    anchor.download = "options.json";
+    anchor.href = URL.createObjectURL(blob);
+
+    // Click the anchor to trigger the download
+    anchor.click();
+
+    console.log("Options saved successfully!");
+    // // Save the JSON string to local storage
+    // try {
+    //   localStorage.setItem("selectedOptions", jsonOptions);
+    //   console.log("Options saved successfully!");
+    // } catch (e) {
+    //   console.error(`Error: localStorage.setItem failed - ${e}`);
+    //   return;
+    // }
+  };
   const handleChange1 = (event) => {
     setSelectedValue1(event.target.value);
   };
@@ -96,15 +145,6 @@ function App() {
   const handleChange9 = (event) => {
     setSelectedValue9(event.target.value);
   };
-  const handleChange10 = (event) => {
-    setSelectedValue10(event.target.value);
-  };
-  const handleChange11 = (event) => {
-    setSelectedValue11(event.target.value);
-  };
-  const handleChange12 = (event) => {
-    setSelectedValue12(event.target.value);
-  };
 
   const handleNext = () => {
     if (
@@ -116,10 +156,7 @@ function App() {
       !selectedValue6 ||
       !selectedValue7 ||
       !selectedValue8 ||
-      !selectedValue9 ||
-      !selectedValue10 ||
-      !selectedValue11 ||
-      !selectedValue12
+      !selectedValue9
     ) {
       alert("Please select all the options");
       return;
@@ -168,10 +205,8 @@ function App() {
     const ASW = syllables.length / words.length;
 
     const score = 206.835 - 1.015 * ASL - 84.6 * ASW;
-    const score2 = 0.39 * ASL + 11.8 * ASW - 15.59;
 
     return isNaN(score) ? "" : score.toFixed(2);
-    return isNaN(score2) ? "" : score2.toFixed(2);
   }
   function getFleschKincaidScore(text) {
     const sentences = text.split(/[.?!]/);
@@ -213,7 +248,7 @@ function App() {
               <td>{person.ResultA}</td>
 
               <td>
-                <select value={selectedValue3} onChange={handleChange3}>
+                <select value={selectedValue1} onChange={handleChange1}>
                   <option value="">--Select--</option>
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
@@ -225,7 +260,11 @@ function App() {
                 <p>Score FKS: {getFleschKincaidScore(person.ResultA)}</p>
               </td>
               <td>
-                <select value={selectedValue4} onChange={handleChange4}>
+                <select
+                  id="priority"
+                  value={selectedValue2}
+                  onChange={handleChange2}
+                >
                   <option value="">--Select--</option>
                   <option value="reliable source">Reliable Source</option>
                   <option value="other source">Other Source</option>
@@ -234,7 +273,7 @@ function App() {
                 </select>
               </td>
               <td>
-                <select value={selectedValue5} onChange={handleChange5}>
+                <select value={selectedValue3} onChange={handleChange3}>
                   <option value="">--Select--</option>
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
@@ -242,7 +281,7 @@ function App() {
                 </select>
               </td>
               <td>
-                <select value={selectedValue6} onChange={handleChange6}>
+                <select value={selectedValue4} onChange={handleChange4}>
                   <option value="">--Select--</option>
                   <option value="high">High</option>
                   <option value="medium">Medium</option>
@@ -267,7 +306,7 @@ function App() {
               </td>
 
               <td>
-                <select value={selectedValue8} onChange={handleChange8}>
+                <select value={selectedValue5} onChange={handleChange5}>
                   <option value="">--Select--</option>
                   <option value="high">High</option>
                   <option value="medium">Medium</option>
@@ -281,7 +320,7 @@ function App() {
               </td>
 
               <td>
-                <select value={selectedValue4} onChange={handleChange4}>
+                <select value={selectedValue6} onChange={handleChange6}>
                   <option value="">--Select--</option>
                   <option value="reliable source">Reliable Source</option>
                   <option value="other source">Other Source</option>
@@ -290,7 +329,7 @@ function App() {
                 </select>
               </td>
               <td>
-                <select value={selectedValue5} onChange={handleChange5}>
+                <select value={selectedValue7} onChange={handleChange7}>
                   <option value="">--Select--</option>
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
@@ -298,7 +337,7 @@ function App() {
                 </select>
               </td>
               <td>
-                <select value={selectedValue12} onChange={handleChange12}>
+                <select value={selectedValue8} onChange={handleChange8}>
                   <option value="">--Select--</option>
                   <option value="high">High</option>
                   <option value="medium">Medium</option>
@@ -343,6 +382,7 @@ function App() {
           Next
         </button>
       </div>
+      <button onClick={saveSelectedOptions}>Save Options</button>
       {!submitted && (
         <div className="row">
           <div className="simi">
@@ -351,8 +391,8 @@ function App() {
             <br />
             <select
               className="dropdown-menu"
-              value={selectedValue12}
-              onChange={handleChange12}
+              value={selectedValue9}
+              onChange={handleChange9}
             >
               <option value="">--Select--</option>
               <option value="high">High</option>
