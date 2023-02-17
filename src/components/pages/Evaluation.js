@@ -50,7 +50,30 @@ const imageSources = {
   2: require("./Q2.png"),
   3: require("./Q3.png"),
 };
+function getFleschReadingEaseScore(text) {
+  const sentences = text.split(/[.?!]/);
+  const words = text.match(/\w+/g);
+  const syllables = text.match(/[aeiouy]+/gi);
 
+  const ASL = words.length / sentences.length;
+  const ASW = syllables.length / words.length;
+
+  const score = 206.835 - 1.015 * ASL - 84.6 * ASW;
+
+  return isNaN(score) ? "" : score.toFixed(2);
+}
+function getFleschKincaidScore(text) {
+  const sentences = text.split(/[.?!]/);
+  const words = text.match(/\w+/g);
+  const syllables = text.match(/[aeiouy]+/gi);
+
+  const ASL = words.length / sentences.length;
+  const ASW = syllables.length / words.length;
+
+  const score2 = 0.39 * ASL + 11.8 * ASW - 15.59;
+
+  return isNaN(score2) ? "" : score2.toFixed(2);
+}
 function App() {
   const [index, setIndex] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(data[0][0]);
@@ -146,23 +169,6 @@ function App() {
     setSelectedValue9(event.target.value);
   };
 
-  const handleNext = () => {
-    if (
-      !selectedValue1 ||
-      !selectedValue2 ||
-      !selectedValue3 ||
-      !selectedValue4 ||
-      !selectedValue5 ||
-      !selectedValue6 ||
-      !selectedValue7 ||
-      !selectedValue8 ||
-      !selectedValue9
-    ) {
-      alert("Please select all the options");
-      return;
-    }
-    // console.log(selectedValue1, selectedValue2, selectedValue3, selectedValue4, selectedValue5, selectedValue6);
-  };
   function handleClick(id) {
     if (id === 1) {
       window.open(
@@ -196,30 +202,12 @@ function App() {
   const handleSubmit = () => {
     setSubmitted(true);
   };
-  function getFleschReadingEaseScore(text) {
-    const sentences = text.split(/[.?!]/);
-    const words = text.match(/\w+/g);
-    const syllables = text.match(/[aeiouy]+/gi);
+  const [date, setDate] = useState(new Date());
 
-    const ASL = words.length / sentences.length;
-    const ASW = syllables.length / words.length;
-
-    const score = 206.835 - 1.015 * ASL - 84.6 * ASW;
-
-    return isNaN(score) ? "" : score.toFixed(2);
-  }
-  function getFleschKincaidScore(text) {
-    const sentences = text.split(/[.?!]/);
-    const words = text.match(/\w+/g);
-    const syllables = text.match(/[aeiouy]+/gi);
-
-    const ASL = words.length / sentences.length;
-    const ASW = syllables.length / words.length;
-
-    const score2 = 0.39 * ASL + 11.8 * ASW - 15.59;
-
-    return isNaN(score2) ? "" : score2.toFixed(2);
-  }
+  // Update the date and time every second
+  setInterval(() => {
+    setDate(new Date());
+  }, 1000);
 
   return (
     <div className="App">
@@ -232,6 +220,7 @@ function App() {
       <table>
         <thead>
           <tr>
+            <th>Date</th>
             <th>Source</th>
             <th>Answer</th>
             <th>Currency</th>
@@ -244,9 +233,9 @@ function App() {
         <tbody>
           {data[index].map((person) => (
             <tr key={person.question}>
+              <td>{date.toLocaleDateString()}</td>
               <td>Result A</td>
               <td>{person.ResultA}</td>
-
               <td>
                 <select value={selectedValue1} onChange={handleChange1}>
                   <option value="">--Select--</option>
@@ -260,11 +249,7 @@ function App() {
                 <p>Score FKS: {getFleschKincaidScore(person.ResultA)}</p>
               </td>
               <td>
-                <select
-                  id="priority"
-                  value={selectedValue2}
-                  onChange={handleChange2}
-                >
+                <select value={selectedValue2} onChange={handleChange2}>
                   <option value="">--Select--</option>
                   <option value="reliable source">Reliable Source</option>
                   <option value="other source">Other Source</option>
@@ -293,7 +278,7 @@ function App() {
           ))}
           {data[index].map((person) => (
             <tr key={person.question}>
-              {/* <td></td> */}
+              <td>{date.toLocaleDateString()}</td>
               <td>Result B</td>
               <td>
                 {imageSources[person.id] && (
@@ -359,23 +344,24 @@ function App() {
         >
           Previous
         </button>
-        {/* <button
-          disabled={index === data.length - 1}
-          onClick={() => {
-            setIndex(index + 1);
-            setSelectedQuestion(data[index + 1][0]);
-            setSubmitted(false);
-          }}
-        >
-          Next
-        </button> */}
+
         <button
+          disabled={
+            !selectedValue1 ||
+            !selectedValue2 ||
+            !selectedValue3 ||
+            !selectedValue4 ||
+            !selectedValue5 ||
+            !selectedValue6 ||
+            !selectedValue7 ||
+            !selectedValue8 ||
+            !selectedValue9
+          }
           onClick={() => {
             if (index < data.length - 1) {
-              handleNext();
               setIndex(index + 1);
               setSelectedQuestion(data[index + 1][0]);
-              //   setSubmitted(false);
+              setSubmitted(false);
             }
           }}
         >
