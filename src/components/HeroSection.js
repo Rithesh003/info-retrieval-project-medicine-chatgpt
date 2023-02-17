@@ -15,7 +15,7 @@ function HeroSection() {
   return (
     <div className="hero-container">
       <video src="/videos/video1.mp4" autoPlay loop muted />
-      <h1>{`AI Mem Assist`}</h1>
+      <h1>{`Memory Query Results Evaluator`}</h1>
       <p style={{ fontSize: "5rem", fontFamily: "cursive" }}>Awaits </p>
       <p>What are you waiting for?</p>
       <div className="hero-btns">

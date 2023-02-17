@@ -74,7 +74,7 @@ function getFleschKincaidScore(text) {
 
   return isNaN(score2) ? "" : score2.toFixed(2);
 }
-function App() {
+function App(props) {
   const [index, setIndex] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(data[0][0]);
   const [submitted, setSubmitted] = useState(false);
@@ -88,6 +88,8 @@ function App() {
   const [selectedValue7, setSelectedValue7] = useState("");
   const [selectedValue8, setSelectedValue8] = useState("");
   const [selectedValue9, setSelectedValue9] = useState("");
+  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const totalQuestions = 30;
 
   const saveSelectedOptions = () => {
     // Create an object with the selected values
@@ -121,25 +123,26 @@ function App() {
       return;
     }
     // Create a new Blob object with the JSON string
-    const blob = new Blob([jsonOptions], { type: "application/json" });
+    // const blob = new Blob([jsonOptions], { type: "application/json" });
 
-    // Create a new anchor element to download the file
-    const anchor = document.createElement("a");
-    anchor.download = "options.json";
-    anchor.href = URL.createObjectURL(blob);
+    // // Create a new anchor element to download the file
+    // const anchor = document.createElement("a");
+    // anchor.download = "options.json";
+    // anchor.href = URL.createObjectURL(blob);
 
-    // Click the anchor to trigger the download
-    anchor.click();
+    // // Click the anchor to trigger the download
+    // anchor.click();
 
-    console.log("Options saved successfully!");
-    // // Save the JSON string to local storage
-    // try {
-    //   localStorage.setItem("selectedOptions", jsonOptions);
-    //   console.log("Options saved successfully!");
-    // } catch (e) {
-    //   console.error(`Error: localStorage.setItem failed - ${e}`);
-    //   return;
-    // }
+    // console.log("Options saved successfully!");
+    // Save the JSON string to local storage
+    try {
+      localStorage.setItem("selectedOptions", jsonOptions);
+      console.log(selectedOptions);
+      console.log("Options saved successfully!");
+    } catch (e) {
+      console.error(`Error: localStorage.setItem failed - ${e}`);
+      return;
+    }
   };
   const handleChange1 = (event) => {
     setSelectedValue1(event.target.value);
@@ -192,16 +195,16 @@ function App() {
   //     });
   //   };
 
-  const handleCommentChange = (event) => {
-    setSelectedQuestion({
-      ...selectedQuestion,
-      comment: event.target.value,
-    });
-  };
+  // const handleCommentChange = (event) => {
+  //   setSelectedQuestion({
+  //     ...selectedQuestion,
+  //     comment: event.target.value,
+  //   });
+  // };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-  };
+  // const handleSubmit = () => {
+  //   setSubmitted(true);
+  // };
   const [date, setDate] = useState(new Date());
 
   // Update the date and time every second
@@ -213,9 +216,12 @@ function App() {
     <div className="App">
       <h1> Compare Question answering results </h1>
       <br />
-      <th>Question</th>
+      {/* <th>Question</th> */}
       {data[index].map((person) => (
-        <td>{person.question}</td>
+        <td>
+          <u>Question</u>: {currentQuestion} of {totalQuestions}
+          <br /> {person.question}
+        </td>
       ))}
       <table>
         <thead>
@@ -334,41 +340,7 @@ function App() {
           ))}
         </tbody>
       </table>
-      <div className="buttons">
-        <button
-          disabled={index === 0}
-          onClick={() => {
-            setIndex(index - 1);
-            setSelectedQuestion(data[index - 1][0]);
-          }}
-        >
-          Previous
-        </button>
-
-        <button
-          disabled={
-            !selectedValue1 ||
-            !selectedValue2 ||
-            !selectedValue3 ||
-            !selectedValue4 ||
-            !selectedValue5 ||
-            !selectedValue6 ||
-            !selectedValue7 ||
-            !selectedValue8 ||
-            !selectedValue9
-          }
-          onClick={() => {
-            if (index < data.length - 1) {
-              setIndex(index + 1);
-              setSelectedQuestion(data[index + 1][0]);
-              setSubmitted(false);
-            }
-          }}
-        >
-          Next
-        </button>
-      </div>
-      <button onClick={saveSelectedOptions}>Save Options</button>
+      <br />
       {!submitted && (
         <div className="row">
           <div className="simi">
@@ -388,7 +360,7 @@ function App() {
             </select>
           </div>
           <br />
-          <div className="comment">
+          {/* <div className="comment">
             <label>Comment:</label>
             <br />
             <br />
@@ -399,9 +371,52 @@ function App() {
             <br />
             <br />
             <button onClick={handleSubmit}>Submit</button>
-          </div>
+          </div> */}
         </div>
       )}
+      <div className="buttons">
+        <button
+          disabled={index === 0}
+          onClick={() => {
+            setIndex(index - 1);
+            if (currentQuestion < totalQuestions) {
+              setCurrentQuestion(currentQuestion - 1);
+            }
+            setSelectedQuestion(data[index - 1][0]);
+          }}
+        >
+          Previous
+        </button>
+
+        <button
+          disabled={
+            !selectedValue1 ||
+            !selectedValue2 ||
+            !selectedValue3 ||
+            !selectedValue4 ||
+            !selectedValue5 ||
+            !selectedValue6 ||
+            !selectedValue7 ||
+            !selectedValue8 ||
+            !selectedValue9
+          }
+          onClick={() => {
+            saveSelectedOptions();
+            if (index < data.length - 1) {
+              setIndex(index + 1);
+              if (currentQuestion < totalQuestions) {
+                setCurrentQuestion(currentQuestion + 1);
+              }
+              setSelectedQuestion(data[index + 1][0]);
+              setSubmitted(false);
+            }
+          }}
+        >
+          Next
+        </button>
+      </div>
+      {/* <button onClick={saveSelectedOptions}>Save Options</button> */}
+
       {submitted && (
         <div className="result">
           {/* <p>Evaluation Metrics: {selectedQuestion.metrics}</p> */}
