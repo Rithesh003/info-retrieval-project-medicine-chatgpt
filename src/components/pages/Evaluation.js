@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./evaluation.css";
+import jwt from "jsonwebtoken";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 const data = [
   [
@@ -79,6 +82,9 @@ function App(props) {
   const [selectedQuestion, setSelectedQuestion] = useState(data[0][0]);
   const [submitted, setSubmitted] = useState(false);
   //   const [allOptionsSelected, setAllOptionsSelected] = useState(false);
+  const [documents, setDocuments] = useState([]);
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
   const [selectedValue1, setSelectedValue1] = useState("");
   const [selectedValue2, setSelectedValue2] = useState("");
   const [selectedValue3, setSelectedValue3] = useState("");
@@ -89,8 +95,21 @@ function App(props) {
   const [selectedValue8, setSelectedValue8] = useState("");
   const [selectedValue9, setSelectedValue9] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(1);
-  const totalQuestions = 30;
+  const [selectedOptions, setselectedOptions] = useState("");
 
+  const totalQuestions = 30;
+  const [email, setEmail] = useState("");
+
+  const handleFormSubmit = (event) => {
+    alert("Email Submitted");
+    event.preventDefault();
+
+    // generate a new JWT token with the updated email parameter
+    const token = jwt.sign({ email: email }, "yourSecretKeyHere");
+
+    // set the JWT token as a cookie with the name "jwtToken"
+    Cookies.set("jwtToken", token, { expires: 1, path: "/" });
+  };
   const saveSelectedOptions = () => {
     // Create an object with the selected values
 
@@ -103,10 +122,6 @@ function App(props) {
       value6: selectedValue6,
       value7: selectedValue7,
       value8: selectedValue8,
-      // fleschReadingEase: getFleschReadingEaseScore(score),
-      // fleschKincaidScore: getFleschKincaidScore(score2),
-      // fleschReadingEase: getFleschReadingEaseScore(score),
-      // fleschKincaidScore: getFleschKincaidScore(score2),
     };
     // Check if selectedOptions is a valid object
     if (!selectedOptions || Object.keys(selectedOptions).length === 0) {
@@ -122,19 +137,6 @@ function App(props) {
       console.error(`Error: JSON.stringify failed - ${e}`);
       return;
     }
-    // Create a new Blob object with the JSON string
-    // const blob = new Blob([jsonOptions], { type: "application/json" });
-
-    // // Create a new anchor element to download the file
-    // const anchor = document.createElement("a");
-    // anchor.download = "options.json";
-    // anchor.href = URL.createObjectURL(blob);
-
-    // // Click the anchor to trigger the download
-    // anchor.click();
-
-    // console.log("Options saved successfully!");
-    // Save the JSON string to local storage
     try {
       localStorage.setItem("selectedOptions", jsonOptions);
       console.log(selectedOptions);
@@ -144,6 +146,33 @@ function App(props) {
       return;
     }
   };
+  useEffect(() => {
+    // Retrieve all documents from MongoDB when component mounts
+    axios
+      .get("/api/documents")
+      .then((res) => setDocuments(res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add a new document to MongoDB when form is submitted
+    axios
+      .post("/api/documents", {
+        email,
+        selectedValue1,
+        selectedValue5,
+        selectedValue2,
+        selectedValue6,
+        selectedValue3,
+        selectedValue7,
+        selectedValue4,
+        selectedValue8,
+      })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  };
+
   const handleChange1 = (event) => {
     setSelectedValue1(event.target.value);
   };
@@ -171,6 +200,18 @@ function App(props) {
   const handleChange9 = (event) => {
     setSelectedValue9(event.target.value);
   };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   // Check if email was used before
+  //   const previousData = localStorage.getItem(email);
+  //   if (previousData) {
+  //     const previousValues = JSON.parse(previousData);
+  //     setselectedOptions(previousValues);
+  //     alert("Your previous selections have been autofilled.");
+  //   } else {
+  //     alert("Please select other options.");
+  //   }
+  // };
 
   function handleClick(id) {
     if (id === 1) {
@@ -187,24 +228,6 @@ function App(props) {
       );
     }
   }
-
-  //   const handleMetricsChange = (event) => {
-  //     setSelectedQuestion({
-  //       ...selectedQuestion,
-  //       metrics: event.target.value,
-  //     });
-  //   };
-
-  // const handleCommentChange = (event) => {
-  //   setSelectedQuestion({
-  //     ...selectedQuestion,
-  //     comment: event.target.value,
-  //   });
-  // };
-
-  // const handleSubmit = () => {
-  //   setSubmitted(true);
-  // };
   const [date, setDate] = useState(new Date());
 
   // Update the date and time every second
@@ -216,6 +239,17 @@ function App(props) {
     <div className="App">
       <h1> Compare Question answering results </h1>
       <br />
+      <form onSubmit={handleSubmit}>
+        <label>
+          Enter your email:
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </label>
+      </form>
+      <br />
       {/* <th>Question</th> */}
       {data[index].map((person) => (
         <td>
@@ -223,6 +257,7 @@ function App(props) {
           <br /> {person.question}
         </td>
       ))}
+
       <table>
         <thead>
           <tr>
@@ -340,13 +375,13 @@ function App(props) {
           ))}
         </tbody>
       </table>
+
       <br />
       {!submitted && (
         <div className="row">
+          <h3> Similarity Between the two Results </h3>
+          <br />
           <div className="simi">
-            {" "}
-            <h3> Similarities Between the two Results </h3>
-            <br />
             <select
               className="dropdown-menu"
               value={selectedValue9}
@@ -360,18 +395,6 @@ function App(props) {
             </select>
           </div>
           <br />
-          {/* <div className="comment">
-            <label>Comment:</label>
-            <br />
-            <br />
-            <textarea
-              value={selectedQuestion.comment}
-              onChange={handleCommentChange}
-            />
-            <br />
-            <br />
-            <button onClick={handleSubmit}>Submit</button>
-          </div> */}
         </div>
       )}
       <div className="buttons">
@@ -401,6 +424,20 @@ function App(props) {
             !selectedValue9
           }
           onClick={() => {
+            const newNote = {
+              email: email,
+              CurrencyA: selectedValue1,
+              objectivityA: selectedValue2,
+              ReliabilityA: selectedValue3,
+              relevanceA: selectedValue4,
+              CurrencyB: selectedValue5,
+              objectivityB: selectedValue6,
+              ReliabilityB: selectedValue7,
+              relevanceB: selectedValue8,
+              Similarity: selectedValue9,
+            };
+
+            axios.post("http://localhost:3001/create", newNote);
             saveSelectedOptions();
             if (index < data.length - 1) {
               setIndex(index + 1);
@@ -415,11 +452,9 @@ function App(props) {
           Next
         </button>
       </div>
-      {/* <button onClick={saveSelectedOptions}>Save Options</button> */}
 
       {submitted && (
         <div className="result">
-          {/* <p>Evaluation Metrics: {selectedQuestion.metrics}</p> */}
           <p>Comment: {selectedQuestion.comment}</p>
         </div>
       )}
@@ -428,44 +463,3 @@ function App(props) {
 }
 
 export default App;
-// import React, { useState } from "react";
-
-// function App() {
-//   const [selectedValue, setSelectedValue] = useState("");
-
-//   const handleChange = (event) => {
-//     setSelectedValue(event.target.value);
-//   };
-
-//   const handleNext = () => {
-//     if (!selectedValue) {
-//       alert("Please select an option from the dropdown");
-//       return;
-//     }
-//     console.log(selectedValue);
-//   };
-
-//   return (
-//     <div>
-//       <select value={selectedValue} onChange={handleChange}>
-//         <option value="">--Select--</option>
-//         <option value="low">Low</option>
-//         <option value="medium">Medium</option>
-//         <option value="high">High</option>
-//         <option value="not sure">Not Sure</option>
-//       </select>
-//       {/* <button onClick={handleNext}>Next</button> */}
-
-//       <select value={selectedValue} onChange={handleChange}>
-//         <option value="">--Select--</option>
-//         <option value="low">Low</option>
-//         <option value="medium">Medium</option>
-//         <option value="high">High</option>
-//         <option value="not sure">Not Sure</option>
-//       </select>
-//       <button onClick={handleNext}>Next</button>
-//     </div>
-//   );
-// }
-
-// export default App;

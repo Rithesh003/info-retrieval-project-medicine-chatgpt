@@ -31,6 +31,7 @@
 
 }
 .simi{
+  padding-left: 10px;
   margin-right: 20px;
 }
 
@@ -60,4 +61,6 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+  
+  
   

@@ -2,14 +2,22 @@
   "name": "info-retrieval-project-medicine-chatgpt",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3001",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.3.2",
+    "cors": "^2.8.5",
+    "dns": "^0.2.2",
+    "express": "^4.18.2",
     "flesch-kincaid": "^2.0.1",
     "framer-motion": "^4.1.17",
+    "history": "^5.3.0",
+    "js-cookie": "^3.0.1",
+    "mongoose": "^6.10.0",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.7.2",
     "react-click-outside-hook": "^1.1.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
@@ -45,5 +53,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rithesh003/info-retrieval-project-medicine-chatgpt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rithesh003/info-retrieval-project-medicine-chatgpt/issues"
+  },
+  "homepage": "https://github.com/Rithesh003/info-retrieval-project-medicine-chatgpt#readme",
+  "description": ""
 }
