@@ -12,7 +12,7 @@ mongoose.connect(
 );
 
 //require route
-Evaluation.use("/", require("./src/noteRoutes"));
+Evaluation.use(require("./src/components/pages/noteRoutes"));
 Evaluation.listen(3001, function() {
   console.log("express server is running on port 3001");
 });
