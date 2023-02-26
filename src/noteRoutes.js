@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Note = require("./noteModel");
+const Note = require("./noteModels");
 
 router.route("/create").post((req, res) => {
   const email = req.body.email;

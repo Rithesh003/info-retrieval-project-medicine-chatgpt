@@ -17,15 +17,15 @@ function admin() {
     },
   ]);
 
-  // useEffect(() => {
-  //   fetch("/notes")
-  //     .then((res) => {
-  //       if (res.ok) {
-  //         return res.json();
-  //       }
-  //     })
-  //     .then((jsonRes) => setNotes(jsonRes));
-  // });
+  useEffect(() => {
+    fetch("/notes")
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+      })
+      .then((jsonRes) => setNotes(jsonRes));
+  });
   // const handleLogout = () => {
   //   localStorage.removeItem("token");
   //   Navigate.push("/login");
